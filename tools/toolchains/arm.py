@@ -362,6 +362,7 @@ class ARMC6(ARM_STD):
             "Cortex-M33-NS": "Cortex-M33" }.get(target.core, target.core)
 
         self.flags['asm'].append("--cpu=%s" % asm_cpu)
+        self.flags['ld'].append("--cpu=%s" % asm_cpu)
 
         self.cc = ([join(TOOLCHAIN_PATHS["ARMC6"], "armclang")] +
                    self.flags['common'] + self.flags['c'])
