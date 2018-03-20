@@ -10,7 +10,6 @@
                 "MBED_TLS_HAVE_ASM",
                 "MBEDTLS_ENTROPY_C",
                 "MBEDTLS_NO_DEFAULT_ENTROPY_SOURCES",
-                "MBEDTLS_TEST_NULL_ENTROPY",
                 "MBEDTLS_HAVE_TIME",
                 "MBEDTLS_REMOVE_ARC4_CIPHERSUITES",
                 
