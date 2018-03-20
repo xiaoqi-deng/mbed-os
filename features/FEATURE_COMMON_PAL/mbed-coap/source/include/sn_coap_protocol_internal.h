@@ -39,7 +39,11 @@ struct sn_coap_hdr_;
 /* * * * * * * * * * * */
 
 /* * For Message resending * */
+#ifdef SN_COAP_DISABLE_RESENDINGS
+#define ENABLE_RESENDINGS                               0 /* Disable resendings */
+#else
 #define ENABLE_RESENDINGS                               1   /**< Enable / Disable resending from library in building */
+#endif
 
 #define SN_COAP_RESENDING_MAX_COUNT                     3   /**< Default number of re-sendings  */
 
@@ -229,6 +233,7 @@ struct coap_s {
     uint8_t sn_coap_resending_count;
     uint8_t sn_coap_resending_intervall;
     uint8_t sn_coap_duplication_buffer_size;
+    uint8_t sn_coap_internal_block2_resp_handling; /* If this is set then coap itself sends a next GET request automatically */
 };
 
 #ifdef __cplusplus
