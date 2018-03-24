@@ -32,6 +32,10 @@ extern "C" {
 #include "rtx_lib.h"
 }
 
+#include "mbed.h"
+
+extern DigitalOut pin_run;
+
 using namespace mbed;
 
 #if (defined(MBED_TICKLESS) && defined(DEVICE_LPTICKER))
@@ -98,6 +102,7 @@ static void default_idle_hook(void)
     uint32_t elapsed_ticks = 0;
 
     core_util_critical_section_enter();
+    pin_run = 0;
     uint32_t ticks_to_sleep = svcRtxKernelSuspend();
     if (ticks_to_sleep) {
         os_timer->schedule_tick(ticks_to_sleep);
@@ -109,6 +114,7 @@ static void default_idle_hook(void)
         elapsed_ticks = os_timer->update_tick();
     }
     svcRtxKernelResume(elapsed_ticks);
+    pin_run = 1;
     core_util_critical_section_exit();
 }
 
@@ -126,9 +132,11 @@ static void default_idle_hook(void)
 {
     // critical section to complete sleep with locked deepsleep
     core_util_critical_section_enter();
+    pin_run = 0;
     sleep_manager_lock_deep_sleep();
     sleep();
     sleep_manager_unlock_deep_sleep();
+    pin_run = 1;
     core_util_critical_section_exit();
 }
 
