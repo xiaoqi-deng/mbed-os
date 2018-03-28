@@ -39,14 +39,12 @@
 
 #if defined(MBEDTLS_USER_CONFIG_FILE)
 #include MBEDTLS_USER_CONFIG_FILE
-#include "check_config.h"
 #endif
 
 #else
 
 #if defined(MBEDTLS_USER_CONFIG_FILE)
 #include MBEDTLS_USER_CONFIG_FILE
-#include "check_config.h"
 #else
 
 
