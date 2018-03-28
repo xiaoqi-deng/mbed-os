@@ -1,0 +1,12 @@
+mbed test -t ARM -vv --compile-list – Lists the available tests
+mbed test -t ARM -m <device> -n <testname> -vv (very verbose) – Builds and Runs the test <testname> on the specified device
+mbed test --run -t ARM -v --report-html=test.html --parallel=N - Run in parallel and num devices = N
+mbed test --compile -t arm -m k64f - This compiles without actually running tests
+
+Examples:
+mbed test --run -m k64f -t arm -n tests-mbedmicro-rtos-mbed-queue -v --report-html=test1.html
+
+Compiling/testing with defines
+==============================
+mbed test -t arm -m k64f -n tests-net-* --compile -DMBED_CFG_ESP8266_SSID="iotlab" -DMBED_CFG_ESP8266_PASS="42F67YxLX4AawRdcj"
+mbed test -t arm -m k64f -n tests-net-* --run -v --report-html=test1.html

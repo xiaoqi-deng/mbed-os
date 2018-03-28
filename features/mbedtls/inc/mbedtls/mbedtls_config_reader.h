@@ -18,7 +18,7 @@
 #ifndef __MBEDTLS_CONFIG_READER_H__
 #define __MBEDTLS_CONFIG_READER_H__
 
-#if MBED_CONF_MBEDTLS_MBEDTLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256
+#if MBED_CONF_MBEDTLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256
     #define MBEDTLS_AES_ROM_TABLES
     #define MBEDTLS_AES_C
     #define MBEDTLS_CIPHER_C
@@ -72,7 +72,7 @@
     
     #define MBEDTLS_SHA256_C
     #define MBEDTLS_MD_C
-    MBEDTLS_CIPHER_MODE_CBC
+    #define MBEDTLS_CIPHER_MODE_CBC
     #define MBEDTLS_X509_CRL_PARSE_C
 
     #define MBEDTLS_KEY_EXCHANGE_ECDHE_ECDSA_ENABLED
@@ -105,7 +105,7 @@
 #endif
 
 #if MBED_CONF_MBEDTLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA384
-#define MBEDTLS_AES_ROM_TABLES
+    #define MBEDTLS_AES_ROM_TABLES
     #define MBEDTLS_AES_C
     #define MBEDTLS_CIPHER_C
     #define MBEDTLS_SSL_CLI_C
@@ -113,9 +113,9 @@
 
     #define MBEDTLS_SSL_TLS_C
     
-    #define MBEDTLS_SHA384_C
+    #define MBEDTLS_SHA512_C
     #define MBEDTLS_MD_C
-    MBEDTLS_CIPHER_MODE_CBC
+    #define MBEDTLS_CIPHER_MODE_CBC
     #define MBEDTLS_X509_CRL_PARSE_C
 
     #define MBEDTLS_KEY_EXCHANGE_ECDHE_ECDSA_ENABLED
@@ -198,7 +198,7 @@
 
     #define MBEDTLS_SSL_TLS_C
     
-    #define MBEDTLS_SHA384_C
+    #define MBEDTLS_SHA512_C
     #define MBEDTLS_MD_C
     #define MBEDTLS_GCM_C
     #define MBEDTLS_X509_CRL_PARSE_C
@@ -237,8 +237,10 @@
     #define MBEDTLS_SSL_CLI_C
 
     #define MBEDTLS_SSL_TLS_C
+    #define MBEDTLS_MD_C
     
     #define MBEDTLS_CCM_C
+    #define MBEDTLS_AES_C
 
     #define MBEDTLS_SSL_CACHE_C
 
@@ -249,12 +251,16 @@
     #define MBEDTLS_CIPHER_C
     #define MBEDTLS_SSL_CLI_C
 
+    #define MBEDTLS_CIPHER_MODE_CBC
     #define MBEDTLS_SSL_TLS_C
-    
-    #define MBEDTLS_CBC_C
+    #define MBEDTLS_MD_C
+    #define MBEDTLS_AES_C
 
     #define MBEDTLS_SSL_CACHE_C
 
     #define MBEDTLS_KEY_EXCHANGE_PSK_ENABLED
 #endif
+
+#include "check_config.h"
+
 #endif // __MBEDTLS_CONFIG_READER_H__
