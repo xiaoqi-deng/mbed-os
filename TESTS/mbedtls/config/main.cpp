@@ -189,6 +189,37 @@ void test_case_psk_with_aes_128_cbc_sha256_ciphersuite() {
 }
 #endif
 
+#if MBED_CONF_MBEDTLS_ECDHE_ECDSA_WITH_AES_CCM
+void test_case_ecdhe_ecdsa_with_aes_ccm_ciphersuite() {
+    mbedtls_ssl_context ssl;
+    mbedtls_ssl_config conf;
+
+    mbedtls_ssl_init( &ssl );
+    mbedtls_ssl_config_defaults(&conf, MBEDTLS_SSL_IS_CLIENT, MBEDTLS_SSL_TRANSPORT_STREAM, 0);
+    ssl.conf = &conf;
+
+    const int *ciphersuites = ssl.conf->ciphersuite_list[ssl.minor_ver];
+
+    int found_norm = 0;
+    int found_8 = 0;
+    int found_128 = 0;
+    for( int i = 0; ciphersuites[i] != 0; i++ ) {
+        if (ciphersuites[i] == MBEDTLS_TLS_ECDHE_ECDSA_WITH_AES_256_CCM) {
+            found_norm = 1;
+        }
+        if (ciphersuites[i] == MBEDTLS_TLS_ECDHE_ECDSA_WITH_AES_256_CCM_8) {
+            found_8 = 1;
+        }
+        if (ciphersuites[i] == MBEDTLS_TLS_ECDHE_ECDSA_WITH_AES_128_CCM) {
+            found_128 = 1;
+        }
+    }
+    TEST_ASSERT_EQUAL_INT_MESSAGE(1, found_norm, "ECDHE_ECDSA_WITH_AES_256_CCM not found in ciphersuites");
+    TEST_ASSERT_EQUAL_INT_MESSAGE(1, found_8, "ECDHE_ECDSA_WITH_AES_256_CCM_8 not found in ciphersuites");
+    TEST_ASSERT_EQUAL_INT_MESSAGE(1, found_128, "ECDHE_ECDSA_WITH_AES_128_CCM not found in ciphersuites");
+}
+#endif
+
 utest::v1::status_t greentea_failure_handler(const Case *const source, const failure_t reason) {
     greentea_case_failure_abort_handler(source, reason);
     return STATUS_CONTINUE;
@@ -215,6 +246,9 @@ Case cases[] = {
 #endif
 #if MBED_CONF_MBEDTLS_PSK_WITH_AES_128_CBC_SHA256
     Case("MbedTLS Config: PSK_WITH_AES_128_CBC_SHA256 ciphersuite", test_case_psk_with_aes_128_cbc_sha256_ciphersuite, greentea_failure_handler),
+#endif
+#if MBED_CONF_MBEDTLS_ECDHE_ECDSA_WITH_AES_CCM
+    Case("MbedTLS Config: ECDHE_ECDSA_WITH_AES_CCM ciphersuite", test_case_ecdhe_ecdsa_with_aes_ccm_ciphersuite, greentea_failure_handler),
 #endif
 };
 
