@@ -23,6 +23,8 @@
 #include "utest/utest.h"
 #include "mbedtls/ssl.h"
 #include "aes_test.h"
+#include "sha256_test.h"
+#include "sha512_test.h"
 
 using namespace utest::v1;
 
@@ -51,8 +53,11 @@ void test_case_ecdhe_ecdsa_with_aes_128_gcm_sha256_ciphersuite() {
 
     int aes_gcm_result = mbedtls_gcm_self_test2(0);
 
+    int sha256_result = mbedtls_sha256_self_test2(0);
+
     TEST_ASSERT_EQUAL_INT_MESSAGE(1, found_128, "ECDHE_ECDSA_WITH_AES_128_GCM_SHA256 not found in ciphersuites");
     TEST_ASSERT_EQUAL_INT_MESSAGE(0, aes_gcm_result, "AES-GCM test failed");
+    TEST_ASSERT_EQUAL_INT_MESSAGE(0, sha256_result, "SHA256 test failed");
 }
 #endif
 
@@ -77,9 +82,11 @@ void test_case_ecdhe_ecdsa_with_aes_256_gcm_sha384_ciphersuite() {
     }
 
     int aes_gcm_result = mbedtls_gcm_self_test2(0);
+    int sha512_result = mbedtls_sha512_self_test2(0);
 
     TEST_ASSERT_EQUAL_INT_MESSAGE(1, found_256, "ECDHE_ECDSA_WITH_AES_256_GCM_SHA384 not found in ciphersuites");
     TEST_ASSERT_EQUAL_INT_MESSAGE(0, aes_gcm_result, "AES-GCM test failed");
+    TEST_ASSERT_EQUAL_INT_MESSAGE(0, sha512_result, "SHA512 test failed");
 }
 #endif
 
@@ -104,8 +111,11 @@ void test_case_ecdhe_ecdsa_with_aes_128_cbc_sha256_ciphersuite() {
 
     int aes_cbc_result = mbedtls_aes_cbc_test(0);
 
+    int sha256_result = mbedtls_sha256_self_test2(0);
+
     TEST_ASSERT_EQUAL_INT_MESSAGE(1, found_128, "ECDHE_ECDSA_WITH_AES_128_CBC_SHA256 not found in ciphersuites");
     TEST_ASSERT_EQUAL_INT_MESSAGE(0, aes_cbc_result, "AES-CBC test failed");
+    TEST_ASSERT_EQUAL_INT_MESSAGE(0, sha256_result, "SHA256 test failed");
 }
 #endif
 
@@ -129,9 +139,11 @@ void test_case_ecdhe_ecdsa_with_aes_256_cbc_sha384_ciphersuite() {
     }
 
     int aes_cbc_result = mbedtls_aes_cbc_test(0);
+    int sha512_result = mbedtls_sha512_self_test2(0);
 
     TEST_ASSERT_EQUAL_INT_MESSAGE(1, found_256, "ECDHE_ECDSA_WITH_AES_256_CBC_SHA384 not found in ciphersuites");
     TEST_ASSERT_EQUAL_INT_MESSAGE(0, aes_cbc_result, "AES-CBC test failed");
+    TEST_ASSERT_EQUAL_INT_MESSAGE(0, sha512_result, "SHA512 test failed");
 }
 #endif
 
@@ -186,9 +198,11 @@ void test_case_psk_with_aes_128_cbc_sha256_ciphersuite() {
     }
 
     int aes_cbc_result = mbedtls_aes_cbc_test(0);
+    int sha256_result = mbedtls_sha256_self_test2(0);
 
     TEST_ASSERT_EQUAL_INT_MESSAGE(1, found_128, "PSK_WITH_AES_128_CBC_SHA256 not found in ciphersuites");
     TEST_ASSERT_EQUAL_INT_MESSAGE(0, aes_cbc_result, "AES-CBC test failed");
+    TEST_ASSERT_EQUAL_INT_MESSAGE(0, sha256_result, "SHA256 test failed");
 }
 #endif
 
@@ -260,7 +274,7 @@ Case cases[] = {
 };
 
 utest::v1::status_t greentea_test_setup(const size_t number_of_cases) {
-    GREENTEA_SETUP(10, "default_auto");
+    GREENTEA_SETUP(20, "default_auto");
     return greentea_test_setup_handler(number_of_cases);
 }
 
