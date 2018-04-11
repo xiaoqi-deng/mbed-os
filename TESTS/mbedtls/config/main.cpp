@@ -25,6 +25,7 @@
 #include "aes_test.h"
 #include "sha256_test.h"
 #include "sha512_test.h"
+#include "ecdsa_test.h"
 
 using namespace utest::v1;
 
@@ -54,10 +55,12 @@ void test_case_ecdhe_ecdsa_with_aes_128_gcm_sha256_ciphersuite() {
     int aes_gcm_result = mbedtls_gcm_self_test2(0);
 
     int sha256_result = mbedtls_sha256_self_test2(0);
+    int ecdsa_result = mbedtls_ecdsa_test(0);
 
     TEST_ASSERT_EQUAL_INT_MESSAGE(1, found_128, "ECDHE_ECDSA_WITH_AES_128_GCM_SHA256 not found in ciphersuites");
     TEST_ASSERT_EQUAL_INT_MESSAGE(0, aes_gcm_result, "AES-GCM test failed");
     TEST_ASSERT_EQUAL_INT_MESSAGE(0, sha256_result, "SHA256 test failed");
+    TEST_ASSERT_EQUAL_INT_MESSAGE(0, ecdsa_result, "ECDSA test failed");
 }
 #endif
 
@@ -83,10 +86,12 @@ void test_case_ecdhe_ecdsa_with_aes_256_gcm_sha384_ciphersuite() {
 
     int aes_gcm_result = mbedtls_gcm_self_test2(0);
     int sha512_result = mbedtls_sha512_self_test2(0);
+    int ecdsa_result = mbedtls_ecdsa_test(0);
 
     TEST_ASSERT_EQUAL_INT_MESSAGE(1, found_256, "ECDHE_ECDSA_WITH_AES_256_GCM_SHA384 not found in ciphersuites");
     TEST_ASSERT_EQUAL_INT_MESSAGE(0, aes_gcm_result, "AES-GCM test failed");
     TEST_ASSERT_EQUAL_INT_MESSAGE(0, sha512_result, "SHA512 test failed");
+    TEST_ASSERT_EQUAL_INT_MESSAGE(0, ecdsa_result, "ECDSA test failed");
 }
 #endif
 
@@ -112,10 +117,12 @@ void test_case_ecdhe_ecdsa_with_aes_128_cbc_sha256_ciphersuite() {
     int aes_cbc_result = mbedtls_aes_cbc_test(0);
 
     int sha256_result = mbedtls_sha256_self_test2(0);
+    int ecdsa_result = mbedtls_ecdsa_test(0);
 
     TEST_ASSERT_EQUAL_INT_MESSAGE(1, found_128, "ECDHE_ECDSA_WITH_AES_128_CBC_SHA256 not found in ciphersuites");
     TEST_ASSERT_EQUAL_INT_MESSAGE(0, aes_cbc_result, "AES-CBC test failed");
     TEST_ASSERT_EQUAL_INT_MESSAGE(0, sha256_result, "SHA256 test failed");
+    TEST_ASSERT_EQUAL_INT_MESSAGE(0, ecdsa_result, "ECDSA test failed");
 }
 #endif
 
@@ -140,10 +147,12 @@ void test_case_ecdhe_ecdsa_with_aes_256_cbc_sha384_ciphersuite() {
 
     int aes_cbc_result = mbedtls_aes_cbc_test(0);
     int sha512_result = mbedtls_sha512_self_test2(0);
+    int ecdsa_result = mbedtls_ecdsa_test(0);
 
     TEST_ASSERT_EQUAL_INT_MESSAGE(1, found_256, "ECDHE_ECDSA_WITH_AES_256_CBC_SHA384 not found in ciphersuites");
     TEST_ASSERT_EQUAL_INT_MESSAGE(0, aes_cbc_result, "AES-CBC test failed");
     TEST_ASSERT_EQUAL_INT_MESSAGE(0, sha512_result, "SHA512 test failed");
+    TEST_ASSERT_EQUAL_INT_MESSAGE(0, ecdsa_result, "ECDSA test failed");
 }
 #endif
 
@@ -233,11 +242,14 @@ void test_case_ecdhe_ecdsa_with_aes_ccm_ciphersuite() {
     }
 
     int aes_ccm_result = mbedtls_ccm_self_test(0);
+    int ecdsa_result = mbedtls_ecdsa_test(0);
+    
 
     TEST_ASSERT_EQUAL_INT_MESSAGE(1, found_norm, "ECDHE_ECDSA_WITH_AES_256_CCM not found in ciphersuites");
     TEST_ASSERT_EQUAL_INT_MESSAGE(1, found_8, "ECDHE_ECDSA_WITH_AES_256_CCM_8 not found in ciphersuites");
     TEST_ASSERT_EQUAL_INT_MESSAGE(1, found_128, "ECDHE_ECDSA_WITH_AES_128_CCM not found in ciphersuites");
     TEST_ASSERT_EQUAL_INT_MESSAGE(0, aes_ccm_result, "AES-CCM test failed\n");
+    TEST_ASSERT_EQUAL_INT_MESSAGE(0, ecdsa_result, "ECDSA test failed");
 }
 #endif
 
