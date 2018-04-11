@@ -22,6 +22,7 @@
 #include "unity/unity.h"
 #include "utest/utest.h"
 #include "mbedtls/ssl.h"
+#include "aes_test.h"
 
 using namespace utest::v1;
 
@@ -47,7 +48,11 @@ void test_case_ecdhe_ecdsa_with_aes_128_gcm_sha256_ciphersuite() {
             found_128 = 1;
         }
     }
+
+    int aes_gcm_result = mbedtls_gcm_self_test2(0);
+
     TEST_ASSERT_EQUAL_INT_MESSAGE(1, found_128, "ECDHE_ECDSA_WITH_AES_128_GCM_SHA256 not found in ciphersuites");
+    TEST_ASSERT_EQUAL_INT_MESSAGE(0, aes_gcm_result, "AES-GCM test failed");
 }
 #endif
 
@@ -70,7 +75,11 @@ void test_case_ecdhe_ecdsa_with_aes_256_gcm_sha384_ciphersuite() {
             found_256 = 1;
         }
     }
+
+    int aes_gcm_result = mbedtls_gcm_self_test2(0);
+
     TEST_ASSERT_EQUAL_INT_MESSAGE(1, found_256, "ECDHE_ECDSA_WITH_AES_256_GCM_SHA384 not found in ciphersuites");
+    TEST_ASSERT_EQUAL_INT_MESSAGE(0, aes_gcm_result, "AES-GCM test failed");
 }
 #endif
 
@@ -92,7 +101,11 @@ void test_case_ecdhe_ecdsa_with_aes_128_cbc_sha256_ciphersuite() {
             found_128 = 1;
         }
     }
+
+    int aes_cbc_result = mbedtls_aes_cbc_test(0);
+
     TEST_ASSERT_EQUAL_INT_MESSAGE(1, found_128, "ECDHE_ECDSA_WITH_AES_128_CBC_SHA256 not found in ciphersuites");
+    TEST_ASSERT_EQUAL_INT_MESSAGE(0, aes_cbc_result, "AES-CBC test failed");
 }
 #endif
 
@@ -114,7 +127,11 @@ void test_case_ecdhe_ecdsa_with_aes_256_cbc_sha384_ciphersuite() {
             found_256 = 1;
         }
     }
+
+    int aes_cbc_result = mbedtls_aes_cbc_test(0);
+
     TEST_ASSERT_EQUAL_INT_MESSAGE(1, found_256, "ECDHE_ECDSA_WITH_AES_256_CBC_SHA384 not found in ciphersuites");
+    TEST_ASSERT_EQUAL_INT_MESSAGE(0, aes_cbc_result, "AES-CBC test failed");
 }
 #endif
 
@@ -140,8 +157,12 @@ void test_case_psk_with_aes_ccm_8_ciphersuites() {
             found_256 = 1;
         }
     }
+
+    int aes_ccm_result = mbedtls_ccm_self_test(0);
+
     TEST_ASSERT_EQUAL_INT_MESSAGE(1, found_128, "PSK_WITH_AES_128_CCM_8 not found in ciphersuites");
     TEST_ASSERT_EQUAL_INT_MESSAGE(1, found_256, "PSK_WITH_AES_256_CCM_8 not found in ciphersuites");
+    TEST_ASSERT_EQUAL_INT_MESSAGE(0, aes_ccm_result, "AES-CCM test failed");
 }
 #endif
 
@@ -163,7 +184,11 @@ void test_case_psk_with_aes_128_cbc_sha256_ciphersuite() {
             found_128 = 1;
         }
     }
+
+    int aes_cbc_result = mbedtls_aes_cbc_test(0);
+
     TEST_ASSERT_EQUAL_INT_MESSAGE(1, found_128, "PSK_WITH_AES_128_CBC_SHA256 not found in ciphersuites");
+    TEST_ASSERT_EQUAL_INT_MESSAGE(0, aes_cbc_result, "AES-CBC test failed");
 }
 #endif
 
@@ -192,9 +217,13 @@ void test_case_ecdhe_ecdsa_with_aes_ccm_ciphersuite() {
             found_128 = 1;
         }
     }
+
+    int aes_ccm_result = mbedtls_ccm_self_test(0);
+
     TEST_ASSERT_EQUAL_INT_MESSAGE(1, found_norm, "ECDHE_ECDSA_WITH_AES_256_CCM not found in ciphersuites");
     TEST_ASSERT_EQUAL_INT_MESSAGE(1, found_8, "ECDHE_ECDSA_WITH_AES_256_CCM_8 not found in ciphersuites");
     TEST_ASSERT_EQUAL_INT_MESSAGE(1, found_128, "ECDHE_ECDSA_WITH_AES_128_CCM not found in ciphersuites");
+    TEST_ASSERT_EQUAL_INT_MESSAGE(0, aes_ccm_result, "AES-CCM test failed\n");
 }
 #endif
 
