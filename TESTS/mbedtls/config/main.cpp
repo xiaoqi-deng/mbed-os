@@ -161,8 +161,8 @@ void test_case_ecdhe_ecdsa_with_aes_256_cbc_sha384_ciphersuite() {
 }
 #endif
 
-#if MBED_CONF_MBEDTLS_PSK_WITH_AES_CCM_8
-void test_case_psk_with_aes_ccm_8_ciphersuites() {
+#if MBED_CONF_MBEDTLS_PSK_WITH_AES_CCM
+void test_case_psk_with_aes_ccm_ciphersuites() {
     mbedtls_ssl_context ssl;
     mbedtls_ssl_config conf;
 
@@ -173,21 +173,25 @@ void test_case_psk_with_aes_ccm_8_ciphersuites() {
 
     const int *ciphersuites = ssl.conf->ciphersuite_list[ssl.minor_ver];
 
-    int found_128 = 0;
-    int found_256 = 0;
+    int found_ccm_8_128 = 0;
+    int found_ccm_8_256 = 0;
+    int found_ccm_128 = 0;
     for( int i = 0; ciphersuites[i] != 0; i++ ) {
 
         if (ciphersuites[i] == MBEDTLS_TLS_PSK_WITH_AES_128_CCM_8) {
-            found_128 = 1;
+            found_ccm_8_128 = 1;
         }else if (ciphersuites[i] == MBEDTLS_TLS_PSK_WITH_AES_256_CCM_8) {
-            found_256 = 1;
+            found_ccm_8_256 = 1;
+        }else if (ciphersuites[i] == MBEDTLS_TLS_PSK_WITH_AES_128_CCM) {
+            found_ccm_128 = 1;
         }
     }
 
     int aes_ccm_result = mbedtls_ccm_self_test(0);
 
-    TEST_ASSERT_EQUAL_INT_MESSAGE(1, found_128, "PSK_WITH_AES_128_CCM_8 not found in ciphersuites");
-    TEST_ASSERT_EQUAL_INT_MESSAGE(1, found_256, "PSK_WITH_AES_256_CCM_8 not found in ciphersuites");
+    TEST_ASSERT_EQUAL_INT_MESSAGE(1, found_ccm_8_128, "PSK_WITH_AES_128_CCM_8 not found in ciphersuites");
+    TEST_ASSERT_EQUAL_INT_MESSAGE(1, found_ccm_8_256, "PSK_WITH_AES_256_CCM_8 not found in ciphersuites");
+    TEST_ASSERT_EQUAL_INT_MESSAGE(1, found_ccm_128, "PSK_WITH_AES_128_CCM not found in ciphersuites");
     TEST_ASSERT_EQUAL_INT_MESSAGE(0, aes_ccm_result, "AES-CCM test failed");
 }
 #endif
@@ -392,6 +396,89 @@ void test_case_ecdh_ecdsa_with_aes_256_gcm_sha384_ciphersuite() {
 }
 #endif
 
+#if MBED_CONF_MBEDTLS_PSK_WITH_AES_128_GCM_SHA256
+void test_case_psk_with_aes_128_gcm_sha256_ciphersuite() {
+    mbedtls_ssl_context ssl;
+    mbedtls_ssl_config conf;
+
+
+    mbedtls_ssl_init( &ssl );
+    mbedtls_ssl_config_defaults(&conf, MBEDTLS_SSL_IS_CLIENT, MBEDTLS_SSL_TRANSPORT_STREAM, 0);
+    ssl.conf = &conf;
+
+    const int *ciphersuites = ssl.conf->ciphersuite_list[ssl.minor_ver];
+
+    int found_128 = 0;
+    for( int i = 0; ciphersuites[i] != 0; i++ ) {
+        if (ciphersuites[i] == MBEDTLS_TLS_PSK_WITH_AES_128_CBC_SHA256) {
+            found_128 = 1;
+        }
+    }
+
+    int aes_gcm_result = mbedtls_gcm_self_test2(0);
+    int sha256_result = mbedtls_sha256_self_test2(0);
+
+    TEST_ASSERT_EQUAL_INT_MESSAGE(1, found_128, "PSK_WITH_AES_128_CBC_SHA256 not found in ciphersuites");
+    TEST_ASSERT_EQUAL_INT_MESSAGE(0, aes_gcm_result, "AES-GCM test failed");
+    TEST_ASSERT_EQUAL_INT_MESSAGE(0, sha256_result, "SHA256 test failed");
+}
+#endif
+
+#if MBED_CONF_MBEDTLS_PSK_WITH_AES_256_GCM_SHA384
+void test_case_psk_with_aes_256_gcm_sha384_ciphersuite() {
+    mbedtls_ssl_context ssl;
+    mbedtls_ssl_config conf;
+
+
+    mbedtls_ssl_init( &ssl );
+    mbedtls_ssl_config_defaults(&conf, MBEDTLS_SSL_IS_CLIENT, MBEDTLS_SSL_TRANSPORT_STREAM, 0);
+    ssl.conf = &conf;
+
+    const int *ciphersuites = ssl.conf->ciphersuite_list[ssl.minor_ver];
+
+    int found_128 = 0;
+    for( int i = 0; ciphersuites[i] != 0; i++ ) {
+        if (ciphersuites[i] == MBEDTLS_TLS_PSK_WITH_AES_256_GCM_SHA384) {
+            found_128 = 1;
+        }
+    }
+
+    int aes_gcm_result = mbedtls_gcm_self_test2(0);
+    int sha256_result = mbedtls_sha512_self_test2(0);
+
+    TEST_ASSERT_EQUAL_INT_MESSAGE(1, found_128, "PSK_WITH_AES_256_GCM_SHA384 not found in ciphersuites");
+    TEST_ASSERT_EQUAL_INT_MESSAGE(0, aes_gcm_result, "AES-GCM test failed");
+    TEST_ASSERT_EQUAL_INT_MESSAGE(0, sha256_result, "SHA512 test failed");
+}
+#endif
+
+#if MBED_CONF_MBEDTLS_PSK_WITH_AES_256_CBC_SHA384
+void test_case_psk_with_aes_256_cbc_sha384_ciphersuite() {
+    mbedtls_ssl_context ssl;
+    mbedtls_ssl_config conf;
+
+
+    mbedtls_ssl_init( &ssl );
+    mbedtls_ssl_config_defaults(&conf, MBEDTLS_SSL_IS_CLIENT, MBEDTLS_SSL_TRANSPORT_STREAM, 0);
+    ssl.conf = &conf;
+
+    const int *ciphersuites = ssl.conf->ciphersuite_list[ssl.minor_ver];
+
+    int found_128 = 0;
+    for( int i = 0; ciphersuites[i] != 0; i++ ) {
+        if (ciphersuites[i] == MBEDTLS_TLS_PSK_WITH_AES_256_CBC_SHA384) {
+            found_128 = 1;
+        }
+    }
+
+    int aes_cbc_result = mbedtls_aes_cbc_test(0);
+    int sha256_result = mbedtls_sha512_self_test2(0);
+
+    TEST_ASSERT_EQUAL_INT_MESSAGE(1, found_128, "PSK_WITH_AES_256_CBC_SHA384 not found in ciphersuites");
+    TEST_ASSERT_EQUAL_INT_MESSAGE(0, aes_cbc_result, "AES-CBC test failed");
+    TEST_ASSERT_EQUAL_INT_MESSAGE(0, sha256_result, "SHA512 test failed");
+}
+#endif
 utest::v1::status_t greentea_failure_handler(const Case *const source, const failure_t reason) {
     greentea_case_failure_abort_handler(source, reason);
     return STATUS_CONTINUE;
@@ -413,8 +500,8 @@ Case cases[] = {
 #if MBED_CONF_MBEDTLS_ECDHE_ECDSA_WITH_AES_128_CCM_8
     Case("MbedTLS Config: ECDHE_ECDSA_WITH_AES_128_CCM_8 ciphersuite", test_case_ecdhe_ecdsa_with_aes_128_ccm_8_ciphersuite, greentea_failure_handler),
 #endif
-#if MBED_CONF_MBEDTLS_PSK_WITH_AES_CCM_8    
-    Case("MbedTLS Config: PSK_WITH_AES_CCM_8 ciphersuites", test_case_psk_with_aes_ccm_8_ciphersuites, greentea_failure_handler),
+#if MBED_CONF_MBEDTLS_PSK_WITH_AES_CCM  
+    Case("MbedTLS Config: PSK_WITH_AES_CCM* ciphersuites", test_case_psk_with_aes_ccm_ciphersuites, greentea_failure_handler),
 #endif
 #if MBED_CONF_MBEDTLS_PSK_WITH_AES_128_CBC_SHA256
     Case("MbedTLS Config: PSK_WITH_AES_128_CBC_SHA256 ciphersuite", test_case_psk_with_aes_128_cbc_sha256_ciphersuite, greentea_failure_handler),
@@ -434,10 +521,19 @@ Case cases[] = {
 #if (MBED_CONF_MBEDTLS_ECDH_ECDSA_WITH_AES_256_GCM_SHA384)
     Case("MbedTLS Config: ECDH_ECDSA_WITH_AES_256_GCM_SHA384 ciphersuite", test_case_ecdh_ecdsa_with_aes_256_gcm_sha384_ciphersuite, greentea_failure_handler),
 #endif
+#if (MBED_CONF_MBEDTLS_TLS_PSK_WITH_AES_128_GCM_SHA256)
+    Case("MbedTLS Config: PSK_WITH_AES_128_GCM_SHA256 ciphersuite", test_case_psk_with_aes_128_gcm_sha256_ciphersuite, greentea_failure_handler),
+#endif
+#if (MBED_CONF_MBEDTLS_TLS_PSK_WITH_AES_256_GCM_SHA384)
+    Case("MbedTLS Config: PSK_WITH_AES_256_GCM_SHA384 ciphersuite", test_case_psk_with_aes_256_gcm_sha384_ciphersuite, greentea_failure_handler),
+#endif
+#if (MBED_CONF_MBEDTLS_PSK_WITH_AES_256_CBC_SHA384)
+    Case("MbedTLS Config: PSK_WITH_AES_256_CBC_SHA384 ciphersuite", test_case_psk_with_aes_256_cbc_sha384_ciphersuite, greentea_failure_handler),
+#endif
 };
 
 utest::v1::status_t greentea_test_setup(const size_t number_of_cases) {
-    GREENTEA_SETUP(30, "default_auto");
+    GREENTEA_SETUP(40, "default_auto");
     return greentea_test_setup_handler(number_of_cases);
 }
 
