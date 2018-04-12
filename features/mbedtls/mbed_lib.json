@@ -29,6 +29,22 @@
         "ECDHE_ECDSA_WITH_AES_CCM": {
             "help": "Include support for the TLS-ECDHE-ECDSA-WITH-AES-*-CCM* ciphersuites",
             "value": 0
+        },
+        "ECDH_ECDSA_WITH_AES_128_CBC_SHA256": {
+            "help": "Include support for the TLS-ECDH-ECDSA-WITH-AES-128-CBC-SHA256 ciphersuite",
+            "value": 0
+        },
+        "ECDH_ECDSA_WITH_AES_128_GCM_SHA256": {
+            "help": "Include support for the TLS-ECDH-ECDSA-WITH-AES-128-GCM-SHA256 ciphersuite",
+            "value": 0
+        },
+        "ECDH_ECDSA_WITH_AES_256_CBC_SHA384": {
+            "help": "Include support for the TLS-ECDH-ECDSA-WITH-AES-256-CBC-SHA384 ciphersuite",
+            "value": 0
+        },
+        "ECDH_ECDSA_WITH_AES_256_GCM_SHA384": {
+            "help": "Include support for the TLS-ECDH-ECDSA-WITH-AES-256-GCM-SHA384 ciphersuite",
+            "value": 0
         }
     },
     "macros": [ "MBEDTLS_USER_CONFIG_FILE=\"mbedtls_config_reader.h\"",

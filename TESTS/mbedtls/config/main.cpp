@@ -30,10 +30,7 @@
 
 using namespace utest::v1;
 
-
-
-// Tests whether a generated clientHello message would contain the TLS_ECDHE_ECDSA_WITH_AES_*_GCM_SHA256 ciphersuites
-#if MBED_CONF_MBEDTLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256
+#if (MBED_CONF_MBEDTLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256)
 void test_case_ecdhe_ecdsa_with_aes_128_gcm_sha256_ciphersuite() {
 
     mbedtls_ssl_context ssl;
@@ -46,10 +43,10 @@ void test_case_ecdhe_ecdsa_with_aes_128_gcm_sha256_ciphersuite() {
 
     const int *ciphersuites = ssl.conf->ciphersuite_list[ssl.minor_ver];
 
-    int found_128 = 0;
+    int found_ecdhe = 0;
     for( int i = 0; ciphersuites[i] != 0; i++ ) {
         if (ciphersuites[i] == MBEDTLS_TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256) {
-            found_128 = 1;
+            found_ecdhe = 1;
         }
     }
 
@@ -59,7 +56,7 @@ void test_case_ecdhe_ecdsa_with_aes_128_gcm_sha256_ciphersuite() {
     int ecdsa_result = mbedtls_ecdsa_test(0);
     int ecdh_result = mbedtls_ecdh_test(0);
 
-    TEST_ASSERT_EQUAL_INT_MESSAGE(1, found_128, "ECDHE_ECDSA_WITH_AES_128_GCM_SHA256 not found in ciphersuites");
+    TEST_ASSERT_EQUAL_INT_MESSAGE(1, found_ecdhe, "ECDHE_ECDSA_WITH_AES_128_GCM_SHA256 not found in ciphersuites");
     TEST_ASSERT_EQUAL_INT_MESSAGE(0, aes_gcm_result, "AES-GCM test failed");
     TEST_ASSERT_EQUAL_INT_MESSAGE(0, sha256_result, "SHA256 test failed");
     TEST_ASSERT_EQUAL_INT_MESSAGE(0, ecdsa_result, "ECDSA test failed");
@@ -67,7 +64,7 @@ void test_case_ecdhe_ecdsa_with_aes_128_gcm_sha256_ciphersuite() {
 }
 #endif
 
-#if MBED_CONF_MBEDTLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384
+#if (MBED_CONF_MBEDTLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384)
 void test_case_ecdhe_ecdsa_with_aes_256_gcm_sha384_ciphersuite() {
     mbedtls_ssl_context ssl;
     mbedtls_ssl_config conf;
@@ -262,6 +259,138 @@ void test_case_ecdhe_ecdsa_with_aes_ccm_ciphersuite() {
     TEST_ASSERT_EQUAL_INT_MESSAGE(0, ecdh_result, "ECDH test failed");
 }
 #endif
+#if MBED_CONF_MBEDTLS_ECDH_ECDSA_WITH_AES_128_CBC_SHA256
+void test_case_ecdh_ecdsa_with_aes_128_cbc_sha256_ciphersuite() {
+
+    mbedtls_ssl_context ssl;
+    mbedtls_ssl_config conf;
+
+
+    mbedtls_ssl_init( &ssl );
+    mbedtls_ssl_config_defaults(&conf, MBEDTLS_SSL_IS_CLIENT, MBEDTLS_SSL_TRANSPORT_STREAM, 0);
+    ssl.conf = &conf;
+
+    const int *ciphersuites = ssl.conf->ciphersuite_list[ssl.minor_ver];
+
+    int found_128 = 0;
+    for( int i = 0; ciphersuites[i] != 0; i++ ) {
+        if (ciphersuites[i] == MBEDTLS_TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256) {
+            found_128 = 1;
+        }
+    }
+
+    int aes_cbc_result = mbedtls_aes_cbc_test(0);
+
+    int sha256_result = mbedtls_sha256_self_test2(0);
+    int ecdsa_result = mbedtls_ecdsa_test(0);
+    int ecdh_result = mbedtls_ecdh_test(0);
+
+    TEST_ASSERT_EQUAL_INT_MESSAGE(1, found_128, "ECDHE_ECDSA_WITH_AES_128_GCM_SHA256 not found in ciphersuites");
+    TEST_ASSERT_EQUAL_INT_MESSAGE(0, aes_cbc_result, "AES-CBC test failed");
+    TEST_ASSERT_EQUAL_INT_MESSAGE(0, sha256_result, "SHA256 test failed");
+    TEST_ASSERT_EQUAL_INT_MESSAGE(0, ecdsa_result, "ECDSA test failed");
+    TEST_ASSERT_EQUAL_INT_MESSAGE(0, ecdh_result, "ECDH test failed");
+}
+#endif // MBED_CONF_MBEDTLS_ECDH_ECDSA_WITH_AES_128_CBC_SHA256
+
+#if (MBED_CONF_MBEDTLS_ECDH_ECDSA_WITH_AES_128_GCM_SHA256)
+void test_case_ecdh_ecdsa_with_aes_128_gcm_sha256_ciphersuite() {
+
+    mbedtls_ssl_context ssl;
+    mbedtls_ssl_config conf;
+
+
+    mbedtls_ssl_init( &ssl );
+    mbedtls_ssl_config_defaults(&conf, MBEDTLS_SSL_IS_CLIENT, MBEDTLS_SSL_TRANSPORT_STREAM, 0);
+    ssl.conf = &conf;
+
+    const int *ciphersuites = ssl.conf->ciphersuite_list[ssl.minor_ver];
+
+    int found_ecdh = 0;
+    for( int i = 0; ciphersuites[i] != 0; i++ ) {
+        if(ciphersuites[i] == MBEDTLS_TLS_ECDH_ECDSA_WITH_AES_128_GCM_SHA256) {
+            found_ecdh = 1;
+        }
+    }
+
+    int aes_gcm_result = mbedtls_gcm_self_test2(0);
+
+    int sha256_result = mbedtls_sha256_self_test2(0);
+    int ecdsa_result = mbedtls_ecdsa_test(0);
+    int ecdh_result = mbedtls_ecdh_test(0);
+
+    TEST_ASSERT_EQUAL_INT_MESSAGE(1, found_ecdh, "ECDH_ECDSA_WITH_AES_128_GCM_SHA256 not found in ciphersuites");
+    TEST_ASSERT_EQUAL_INT_MESSAGE(0, aes_gcm_result, "AES-GCM test failed");
+    TEST_ASSERT_EQUAL_INT_MESSAGE(0, sha256_result, "SHA256 test failed");
+    TEST_ASSERT_EQUAL_INT_MESSAGE(0, ecdsa_result, "ECDSA test failed");
+    TEST_ASSERT_EQUAL_INT_MESSAGE(0, ecdh_result, "ECDH test failed");
+}
+#endif
+
+#if MBED_CONF_MBEDTLS_ECDH_ECDSA_WITH_AES_256_CBC_SHA384
+void test_case_ecdh_ecdsa_with_aes_256_cbc_sha384_ciphersuite() {
+    mbedtls_ssl_context ssl;
+    mbedtls_ssl_config conf;
+
+
+    mbedtls_ssl_init( &ssl );
+    mbedtls_ssl_config_defaults(&conf, MBEDTLS_SSL_IS_CLIENT, MBEDTLS_SSL_TRANSPORT_STREAM, 0);
+    ssl.conf = &conf;
+
+    const int *ciphersuites = ssl.conf->ciphersuite_list[ssl.minor_ver];
+
+    int found_256 = 0;
+    for( int i = 0; ciphersuites[i] != 0; i++ ) {
+        if (ciphersuites[i] == MBEDTLS_TLS_ECDH_ECDSA_WITH_AES_256_CBC_SHA384) {
+            found_256 = 1;
+        }
+    }
+
+    int aes_cbc_result = mbedtls_aes_cbc_test(0);
+    int sha512_result = mbedtls_sha512_self_test2(0);
+    int ecdsa_result = mbedtls_ecdsa_test(0);
+    int ecdh_result = mbedtls_ecdh_test(0);
+
+    TEST_ASSERT_EQUAL_INT_MESSAGE(1, found_256, "ECDH_ECDSA_WITH_AES_256_CBC_SHA384 not found in ciphersuites");
+    TEST_ASSERT_EQUAL_INT_MESSAGE(0, aes_cbc_result, "AES-CBC test failed");
+    TEST_ASSERT_EQUAL_INT_MESSAGE(0, sha512_result, "SHA512 test failed");
+    TEST_ASSERT_EQUAL_INT_MESSAGE(0, ecdsa_result, "ECDSA test failed");
+    TEST_ASSERT_EQUAL_INT_MESSAGE(0, ecdh_result, "ECDH test failed");
+}
+#endif
+
+#if (MBED_CONF_MBEDTLS_ECDH_ECDSA_WITH_AES_256_GCM_SHA384)
+void test_case_ecdh_ecdsa_with_aes_256_gcm_sha384_ciphersuite() {
+    mbedtls_ssl_context ssl;
+    mbedtls_ssl_config conf;
+
+
+    mbedtls_ssl_init( &ssl );
+    mbedtls_ssl_config_defaults(&conf, MBEDTLS_SSL_IS_CLIENT, MBEDTLS_SSL_TRANSPORT_STREAM, 0);
+    ssl.conf = &conf;
+
+    const int *ciphersuites = ssl.conf->ciphersuite_list[ssl.minor_ver];
+
+    int found_256 = 0;
+    for( int i = 0; ciphersuites[i] != 0; i++ ) {
+
+        if (ciphersuites[i] == MBEDTLS_TLS_ECDH_ECDSA_WITH_AES_256_GCM_SHA384) {
+            found_256 = 1;
+        }
+    }
+
+    int aes_gcm_result = mbedtls_gcm_self_test2(0);
+    int sha512_result = mbedtls_sha512_self_test2(0);
+    int ecdsa_result = mbedtls_ecdsa_test(0);
+    int ecdh_result = mbedtls_ecdh_test(0);
+
+    TEST_ASSERT_EQUAL_INT_MESSAGE(1, found_256, "ECDH_ECDSA_WITH_AES_256_GCM_SHA384 not found in ciphersuites");
+    TEST_ASSERT_EQUAL_INT_MESSAGE(0, aes_gcm_result, "AES-GCM test failed");
+    TEST_ASSERT_EQUAL_INT_MESSAGE(0, sha512_result, "SHA512 test failed");
+    TEST_ASSERT_EQUAL_INT_MESSAGE(0, ecdsa_result, "ECDSA test failed");
+    TEST_ASSERT_EQUAL_INT_MESSAGE(0, ecdh_result, "ECDH test failed");
+}
+#endif
 
 utest::v1::status_t greentea_failure_handler(const Case *const source, const failure_t reason) {
     greentea_case_failure_abort_handler(source, reason);
@@ -293,10 +422,22 @@ Case cases[] = {
 #if MBED_CONF_MBEDTLS_ECDHE_ECDSA_WITH_AES_CCM
     Case("MbedTLS Config: ECDHE_ECDSA_WITH_AES_CCM ciphersuite", test_case_ecdhe_ecdsa_with_aes_ccm_ciphersuite, greentea_failure_handler),
 #endif
+#if MBED_CONF_MBEDTLS_ECDH_ECDSA_WITH_AES_128_CBC_SHA256
+    Case("MBedTLS Config: ECDH_ECDSA_WITH_AES_128_CBC_SHA256 ciphersuite", test_case_ecdh_ecdsa_with_aes_128_cbc_sha256_ciphersuite, greentea_failure_handler),
+#endif
+#if (MBED_CONF_MBEDTLS_ECDH_ECDSA_WITH_AES_128_GCM_SHA256)
+    Case("MMbedTLS Config: ECDH_ECDSA_WITH_AES_128_GCM_SHA256 ciphersuite", test_case_ecdh_ecdsa_with_aes_128_gcm_sha256_ciphersuite, greentea_failure_handler),
+#endif
+#if MBED_CONF_MBEDTLS_ECDH_ECDSA_WITH_AES_256_CBC_SHA384
+    Case("MbedTLS Config: ECDH_ECDSA_WITH_AES_256_CBC_SHA384 ciphersuite", test_case_ecdh_ecdsa_with_aes_256_cbc_sha384_ciphersuite, greentea_failure_handler),
+#endif
+#if (MBED_CONF_MBEDTLS_ECDH_ECDSA_WITH_AES_256_GCM_SHA384)
+    Case("MbedTLS Config: ECDH_ECDSA_WITH_AES_256_GCM_SHA384 ciphersuite", test_case_ecdh_ecdsa_with_aes_256_gcm_sha384_ciphersuite, greentea_failure_handler),
+#endif
 };
 
 utest::v1::status_t greentea_test_setup(const size_t number_of_cases) {
-    GREENTEA_SETUP(20, "default_auto");
+    GREENTEA_SETUP(30, "default_auto");
     return greentea_test_setup_handler(number_of_cases);
 }
 
